@@ -1,0 +1,27 @@
+CREATE TABLE Student (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    age INT,
+    address VARCHAR(255),
+    email VARCHAR(255)
+);
+
+CREATE TABLE Teacher (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT,
+    result VARCHAR(100),
+    percentage DECIMAL(5, 2),
+    subject_passed VARCHAR(100),
+    teacher_remarks TEXT,
+    FOREIGN KEY (student_id) REFERENCES Student(id)
+);
+INSERT INTO Student (name, age, address, email) VALUES ('John Doe', 20, '123 Main St', 'john@example.com');
+INSERT INTO Student (name, age, address, email) VALUES ('Jane Smith', 22, '456 Elm St', 'jane@example.com');
+
+INSERT INTO Teacher (student_id, result, percentage, subject_passed, teacher_remarks) VALUES (1, 'Pass', 85.5, 'Math', 'Good job!');
+INSERT INTO Teacher (student_id, result, percentage, subject_passed, teacher_remarks) VALUES (2, 'Pass', 90.0, 'Science', 'Excellent work!');
+SELECT *
+FROM Student
+INNER JOIN Teacher ON Student.id = Teacher.student_id;SELECT *
+FROM Student
+INNER JOIN Teacher ON Student.id = Teacher.student_id;
