@@ -1,0 +1,263 @@
+
+Sure, here's how you can create two tables (Student and Teacher), perform an inner join between them, and then create a procedure for the inner join:
+
+sql
+Copy code
+-- Create the Student table
+CREATE TABLE Student (
+    StudentID INT PRIMARY KEY,
+    Name VARCHAR(100),
+    Age INT,
+    Class VARCHAR(50)
+);
+
+-- Insert some sample data into the Student table
+INSERT INTO Student (StudentID, Name, Age, Class)
+VALUES
+    (1, 'John', 18, '10th'),
+    (2, 'Emily', 17, '11th'),
+    (3, 'Michael', 16, '9th');
+
+-- Create the Teacher table
+CREATE TABLE Teacher (
+    TeacherID INT PRIMARY KEY,
+    Name VARCHAR(100),
+    Subject VARCHAR(50)
+);
+
+-- Insert some sample data into the Teacher table
+INSERT INTO Teacher (TeacherID, Name, Subject)
+VALUES
+    (101, 'Mr. Smith', 'Math'),
+    (102, 'Ms. Johnson', 'English'),
+    (103, 'Dr. Patel', 'Science');
+
+-- Create the InnerJoinProcedure
+CREATE PROCEDURE InnerJoinProcedure
+AS
+BEGIN
+    -- Declare variables to store the result set
+    DECLARE @Result TABLE (
+        StudentName VARCHAR(100),
+        StudentAge INT,
+        StudentClass VARCHAR(50),
+        TeacherName VARCHAR(100),
+        Subject VARCHAR(50)
+    )
+
+    -- Perform the inner join and insert the result into the @Result table
+    INSERT INTO @Result (StudentName, StudentAge, StudentClass, TeacherName, Subject)
+    SELECT s.Name AS StudentName, s.Age AS StudentAge, s.Class AS StudentClass,
+           t.Name AS TeacherName, t.Subject
+    FROM Student s
+    INNER JOIN Teacher t ON s.Class = t.Subject
+
+    -- Return the result set
+    SELECT * FROM @Result
+END
+This script first creates the Student and Teacher tables, inserts sample data into them, and then defines a stored procedure named InnerJoinProcedure.
+ This procedure performs an inner join between
+ the Student and Teacher tables based on the condition Student.Class = Teacher.Subject,
+ and returns the result set with columns such as StudentName, StudentAge, StudentClass, TeacherName, and Subject.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Creating procedures for all SQL commands would be quite extensive, but I can certainly provide examples for some common SQL commands:
+
+SELECT Procedure:
+sql
+Copy code
+CREATE PROCEDURE SelectProcedure
+AS
+BEGIN
+    SELECT * FROM TableName;
+END;
+INSERT Procedure:
+sql
+Copy code
+CREATE PROCEDURE InsertProcedure
+    @Column1 DATATYPE,
+    @Column2 DATATYPE,
+    ...
+AS
+BEGIN
+    INSERT INTO TableName (Column1, Column2, ...)
+    VALUES (@Column1, @Column2, ...);
+END;
+UPDATE Procedure:
+sql
+Copy code
+CREATE PROCEDURE UpdateProcedure
+    @ID INT,
+    @NewValue DATATYPE
+AS
+BEGIN
+    UPDATE TableName
+    SET Column = @NewValue
+    WHERE ID = @ID;
+END;
+DELETE Procedure:
+sql
+Copy code
+CREATE PROCEDURE DeleteProcedure
+    @ID INT
+AS
+BEGIN
+    DELETE FROM TableName
+    WHERE ID = @ID;
+END
+use above table
+ChatGPT
+Sure, I'll demonstrate procedures for the SELECT, INSERT, UPDATE, DELETE commands using the previously defined Student and Teacher tables, and then provide a procedure for INNER JOIN.
+
+SELECT Procedure:
+sql
+Copy code
+CREATE PROCEDURE SelectStudentsProcedure
+AS
+BEGIN
+    SELECT * FROM Student;
+END;
+INSERT Procedure:
+sql
+Copy code
+CREATE PROCEDURE InsertStudentProcedure
+    @Name VARCHAR(100),
+    @Age INT,
+    @Class VARCHAR(50)
+AS
+BEGIN
+    INSERT INTO Student (Name, Age, Class)
+    VALUES (@Name, @Age, @Class);
+END;
+UPDATE Procedure:
+sql
+Copy code
+CREATE PROCEDURE UpdateStudentAgeProcedure
+    @StudentID INT,
+    @NewAge INT
+AS
+BEGIN
+    UPDATE Student
+    SET Age = @NewAge
+    WHERE StudentID = @StudentID;
+END;
+DELETE Procedure:
+sql
+Copy code
+CREATE PROCEDURE DeleteStudentProcedure
+    @StudentID INT
+AS
+BEGIN
+    DELETE FROM Student
+    WHERE StudentID = @StudentID;
+END;
+INNER JOIN Procedure:
+sql
+Copy code
+CREATE PROCEDURE InnerJoinStudentsTeachersProcedure
+AS
+BEGIN
+    -- Declare variables to store the result set
+    DECLARE @Result TABLE (
+        StudentName VARCHAR(100),
+        StudentAge INT,
+        StudentClass VARCHAR(50),
+        TeacherName VARCHAR(100),
+        Subject VARCHAR(50)
+    )
+
+    -- Perform the inner join and insert the result into the @Result table
+    INSERT INTO @Result (StudentName, StudentAge, StudentClass, TeacherName, Subject)
+    SELECT s.Name AS StudentName, s.Age AS StudentAge, s.Class AS StudentClass,
+           t.Name AS TeacherName, t.Subject
+    FROM Student s
+    INNER JOIN Teacher t ON s.Class = t.Subject
+
+    -- Return the result set
+    SELECT * FROM @Result
+END;
+These procedures perform the basic CRUD (Create, Read, Update, Delete) operations on the Student table and demonstrate how to perform an INNER JOIN between Student and Teacher tables.
+
+make for left join right join multiple join
+ChatGPT
+Certainly! Below are procedures for performing LEFT JOIN, RIGHT JOIN, and multiple JOINs (combining LEFT JOIN and INNER JOIN) using the Student and Teacher tables:
+
+LEFT JOIN Procedure:
+sql
+Copy code
+CREATE PROCEDURE LeftJoinStudentsTeachersProcedure
+AS
+BEGIN
+    -- Declare variables to store the result set
+    DECLARE @Result TABLE (
+        StudentName VARCHAR(100),
+        StudentAge INT,
+        StudentClass VARCHAR(50),
+        TeacherName VARCHAR(100),
+        Subject VARCHAR(50)
+    )
+
+    -- Perform the left join and insert the result into the @Result table
+    INSERT INTO @Result (StudentName, StudentAge, StudentClass, TeacherName, Subject)
+    SELECT s.Name AS StudentName, s.Age AS StudentAge, s.Class AS StudentClass,
+           ISNULL(t.Name, 'No Teacher') AS TeacherName, t.Subject
+    FROM Student s
+    LEFT JOIN Teacher t ON s.Class = t.Subject
+
+    -- Return the result set
+    SELECT * FROM @Result
+END;
+RIGHT JOIN Procedure:
+sql
+Copy code
+CREATE PROCEDURE RightJoinStudentsTeachersProcedure
+AS
+BEGIN
+    -- Declare variables to store the result set
+    DECLARE @Result TABLE (
+        StudentName VARCHAR(100),
+        StudentAge INT,
+        StudentClass VARCHAR(50),
+        TeacherName VARCHAR(100),
+        Subject VARCHAR(50)
+    )
+
+    -- Perform the right join and insert the result into the @Result table
+    INSERT INTO @Result (StudentName, StudentAge, StudentClass, TeacherName, Subject)
+    SELECT ISNULL(s.Name, 'No Student') AS StudentName, ISNULL(s.Age, 0) AS StudentAge, ISNULL(s.Class, 'No Class') AS StudentClass,
+           t.Name AS TeacherName, t.Subject
+    FROM Student s
+    RIGHT JOIN Teacher t ON s.Class = t.Subject
+
+    -- Return the result set
+    SELECT * FROM @Result
+END;
+Multiple JOINs (LEFT JOIN + INNER JOIN) Procedure:
+sql
+Copy code
+CREATE PROCEDURE MultipleJoinStudentsTeachersProcedure
+AS
+BEGIN
+    -- Declare variables to store the result set
+    DECLARE @Result TABLE (
+        StudentName VARCHAR(100),
+        StudentAge INT,
+        StudentClass VARCHAR(50),
+        TeacherName VARCHAR(100),
+        Subject VARCHAR(50)
+    )
+
+    -- Perform the multiple join and insert the result into the @Result table
+    INSERT INTO @Result (StudentName, StudentAge, StudentClass, TeacherName, Subject)
+    SELECT s.Name AS StudentName, s.Age AS StudentAge, s.Class AS StudentClass,
+           t.Name AS TeacherName, t.Subject
+    FROM Student s
+    LEFT JOIN Teacher t ON s.Class = t.Subject
+    INNER JOIN Teacher t2 ON s.Class = t2.Subject
+
+    -- Return the result set
+    SELECT * FROM @Result
+END;
+These procedures demonstrate LEFT JOIN, RIGHT JOIN, and multiple JOINs using combinations of the Student and Teacher tables.
