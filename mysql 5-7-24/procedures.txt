@@ -1,0 +1,78 @@
+-- Procedure to insert a student record
+DELIMITER //
+CREATE PROCEDURE InsertStudent(
+    IN student_name VARCHAR(50),
+    IN student_age INT,
+    IN student_address VARCHAR(100)
+)
+BEGIN
+    INSERT INTO student (name, age, address) VALUES (student_name, student_age, student_address);
+END //
+DELIMITER ;
+
+-- Procedure to update a student record
+DELIMITER //
+CREATE PROCEDURE UpdateStudent(
+    IN student_id INT,
+    IN student_name VARCHAR(50),
+    IN student_age INT,
+    IN student_address VARCHAR(100)
+)
+BEGIN
+    UPDATE student SET name = student_name, age = student_age, address = student_address WHERE id = student_id;
+END //
+DELIMITER ;
+
+-- Procedure to delete a student record
+DELIMITER //
+CREATE PROCEDURE DeleteStudent(
+    IN student_id INT
+)
+BEGIN
+    DELETE FROM student WHERE id = student_id;
+END //
+DELIMITER ;
+
+-- Procedure to alter student table
+DELIMITER //
+CREATE PROCEDURE AlterStudent(
+    IN column_name VARCHAR(50),
+    IN data_type VARCHAR(50)
+)
+BEGIN
+    SET @sql = CONCAT('ALTER TABLE student ADD ', column_name, ' ', data_type);
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+END //
+DELIMITER ;
+
+-- Procedure to perform inner join between student and teacher table
+DELIMITER //
+CREATE PROCEDURE InnerJoinStudentTeacher()
+BEGIN
+    SELECT *
+    FROM student
+    INNER JOIN teacher ON <condition>; -- Specify the join condition
+END //
+DELIMITER ;
+
+-- Procedure to perform left join between student and teacher table
+DELIMITER //
+CREATE PROCEDURE LeftJoinStudentTeacher()
+BEGIN
+    SELECT *
+    FROM student
+    LEFT JOIN teacher ON <condition>; -- Specify the join condition
+END //
+DELIMITER ;
+
+-- Procedure to perform right join between student and teacher table
+DELIMITER //
+CREATE PROCEDURE RightJoinStudentTeacher()
+BEGIN
+    SELECT *
+    FROM student
+    RIGHT JOIN teacher ON <condition>; -- Specify the join condition
+END //
+DELIMITER ;
